@@ -1,26 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Zaira Game</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .iframe-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      /* Safe area support for notch/home indicator on iOS */
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000;
+    }
+
+    /* Fullscreen button for mobile */
+    #fullscreen-btn {
+      position: fixed;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      right: calc(16px + env(safe-area-inset-right));
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 20px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: opacity 0.3s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #fullscreen-btn:active {
+      opacity: 0.6;
+    }
+
+    /* Hide button when already in fullscreen */
+    :fullscreen #fullscreen-btn,
+    :-webkit-full-screen #fullscreen-btn {
+      display: none;
+    }
+
+    /* Landscape hint overlay (optional UX) */
+    #rotate-hint {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      font-family: sans-serif;
+      font-size: 16px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 99999;
+      text-align: center;
+      padding: 24px;
+    }
+
+    #rotate-hint svg {
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      50%  { transform: rotate(90deg); }
+      100% { transform: rotate(0deg); }
+    }
+  </style>
 </head>
 <body>
-  <iframe 
-    src="https://script.google.com/macros/s/AKfycbwS8oHzavmmNsHXzziHZpBLP1DqkUCI5q95R069MnXc56a_IOMbiKWYAsBdUw6YhmJl/exec"
-    width="100%"
-    height="100%"
-    allowfullscreen="true"
-    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;">
-  </iframe>
+
+  <div class="iframe-wrapper">
+    <iframe
+      id="game-frame"
+      src="https://script.google.com/macros/s/AKfycbwS8oHzavmmNsHXzziHZpBLP1DqkUCI5q95R069MnXc56a_IOMbiKWYAsBdUw6YhmJl/exec"
+      allowfullscreen="true"
+      allow="fullscreen; autoplay; camera; microphone"
+      scrolling="auto"
+      frameborder="0"
+    ></iframe>
+  </div>
+
+  <!-- Fullscreen toggle button -->
+  <button id="fullscreen-btn" title="Fullscreen" aria-label="Toggle Fullscreen">⛶</button>
 
   <script>
-    window.onload = function() {
-      document.querySelector('iframe')
-        .requestFullscreen()
-        .catch((err) => {
-          console.error('Error attempting to enable full-screen mode:', err.message);
-        });
-    };
+    const btn = document.getElementById('fullscreen-btn');
+
+    function enterFullscreen() {
+      const el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
+      else if (el.msRequestFullscreen) el.msRequestFullscreen();
+    }
+
+    function exitFullscreen() {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
+    }
+
+    function isFullscreen() {
+      return !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+      );
+    }
+
+    btn.addEventListener('click', () => {
+      if (isFullscreen()) {
+        exitFullscreen();
+        btn.textContent = '⛶';
+      } else {
+        enterFullscreen();
+        btn.textContent = '✕';
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      btn.textContent = isFullscreen() ? '✕' : '⛶';
+    });
+    document.addEventListener('webkitfullscreenchange', () => {
+      btn.textContent = isFullscreen() ? '✕' : '⛶';
+    });
+
+    // Auto fullscreen on load (works on desktop; mobile needs user gesture)
+    window.addEventListener('load', () => {
+      enterFullscreen();
+    });
+
+    // Fix iframe height on mobile browsers with dynamic toolbars
+    function setVh() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      document.querySelector('.iframe-wrapper').style.height = window.innerHeight + 'px';
+    }
+    setVh();
+    window.addEventListener('resize', setVh);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(setVh, 300);
+    });
   </script>
 </body>
 </html>
-
