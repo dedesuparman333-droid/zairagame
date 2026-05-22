@@ -1,450 +1,380 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#1a0a2e">
-<meta name="description" content="Rahaza Math Kids — Game belajar matematika pertambahan yang seru dan menyenangkan untuk anak-anak!">
-<meta property="og:title" content="Rahaza Math Kids 🌈">
-<meta property="og:description" content="Game belajar matematika pertambahan yang seru untuk anak-anak!">
-<meta property="og:type" content="website">
-<title>Rahaza Math Kids 🌈</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rahaza Farm - Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        metallic: {
+                            100: '#d5e8df',
+                            300: '#83b8a1',
+                            500: '#348062', 
+                            700: '#245a44',
+                            900: '#153326',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        .dark ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #348062; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #245a44; }
+        
+        .glass-panel { background: rgba(255, 255, 255, 0.95); }
+        @media (min-width: 768px) {
+            .glass-panel { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+        }
+        .dark .glass-panel { background: rgba(31, 41, 55, 0.95); }
+        
+        .hero-gradient { background: linear-gradient(135deg, #348062 0%, #153326 100%); }
 
-:root {
-  --red: #ff5e62;
-  --orange: #ff9966;
-  --yellow: #ffe066;
-  --green: #20c997;
-  --blue: #17a2b8;
-  --purple: #6f42c1;
-  --pink: #e83e8c;
-  --deep: #1a0a2e;
-  --deep2: #2d1b69;
-}
-
-html, body {
-  min-height: 100dvh;
-  overflow-x: hidden;
-}
-
-body {
-  font-family: 'Nunito', sans-serif;
-  background: var(--deep);
-  color: #fff;
-  position: relative;
-}
-
-/* ── Starfield ── */
-.stars {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.star {
-  position: absolute;
-  border-radius: 50%;
-  background: white;
-  animation: twinkle var(--d) ease-in-out infinite alternate;
-  opacity: 0;
-}
-@keyframes twinkle {
-  0%   { opacity: 0.1; transform: scale(0.8); }
-  100% { opacity: 0.9; transform: scale(1.2); }
-}
-
-/* ── Floating blobs ── */
-.blob {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.18;
-  pointer-events: none;
-  z-index: 0;
-  animation: blobFloat var(--t) ease-in-out infinite alternate;
-}
-@keyframes blobFloat {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(var(--mx), var(--my)) scale(1.1); }
-}
-
-/* ── Layout ── */
-.page {
-  position: relative;
-  z-index: 1;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 20px 40px;
-  text-align: center;
-}
-
-/* ── Brand ── */
-.mascot {
-  font-size: clamp(72px, 18vw, 110px);
-  display: block;
-  animation: mascotBounce 2.5s ease-in-out infinite;
-  filter: drop-shadow(0 12px 32px rgba(255,224,102,0.4));
-  line-height: 1;
-  margin-bottom: 4px;
-}
-@keyframes mascotBounce {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50%       { transform: translateY(-14px) rotate(3deg); }
-}
-
-.brand-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 50px;
-  padding: 6px 16px;
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.7);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-  backdrop-filter: blur(8px);
-}
-.brand-chip-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--green);
-  animation: pulse-dot 1.5s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  0%,100% { box-shadow: 0 0 0 0 rgba(32,201,151,0.6); }
-  50%      { box-shadow: 0 0 0 6px rgba(32,201,151,0); }
-}
-
-.title {
-  font-family: 'Fredoka', sans-serif;
-  font-size: clamp(42px, 11vw, 80px);
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, #ffe066 0%, #ff9966 30%, #ff5e62 55%, #e83e8c 75%, #a855f7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 200%;
-  animation: titleShift 6s ease infinite;
-}
-@keyframes titleShift {
-  0%  { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100%{ background-position: 0% 50%; }
-}
-
-.subtitle {
-  font-size: clamp(15px, 4vw, 19px);
-  font-weight: 600;
-  color: rgba(255,255,255,0.65);
-  max-width: 420px;
-  line-height: 1.5;
-  margin-bottom: 36px;
-}
-
-/* ── Feature Pills ── */
-.features {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 40px;
-  max-width: 480px;
-}
-.feat-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 50px;
-  padding: 9px 18px;
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.85);
-  backdrop-filter: blur(6px);
-  animation: pillFade 0.6s ease both;
-}
-.feat-pill:nth-child(1) { animation-delay: 0.1s; }
-.feat-pill:nth-child(2) { animation-delay: 0.2s; }
-.feat-pill:nth-child(3) { animation-delay: 0.3s; }
-.feat-pill:nth-child(4) { animation-delay: 0.4s; }
-.feat-pill:nth-child(5) { animation-delay: 0.5s; }
-@keyframes pillFade {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.feat-pill .icon { font-size: 18px; }
-
-/* ── CTA Button ── */
-.cta-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  max-width: 340px;
-  animation: ctaRise 0.7s 0.4s ease both;
-}
-@keyframes ctaRise {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.btn-cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 20px 32px;
-  border: none;
-  border-radius: 20px;
-  font-family: 'Fredoka', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: #1a0a2e;
-  cursor: pointer;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 50%, var(--red) 100%);
-  background-size: 200% 200%;
-  animation: btnPulse 3s ease infinite;
-  box-shadow:
-    0 0 0 0 rgba(255,224,102,0),
-    0 12px 40px rgba(255,153,102,0.45),
-    0 4px 0 rgba(0,0,0,0.2);
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-@keyframes btnPulse {
-  0%,100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
-}
-.btn-cta::before {
-  content: '';
-  position: absolute;
-  top: -50%; left: -60%;
-  width: 40%; height: 200%;
-  background: rgba(255,255,255,0.25);
-  transform: skewX(-20deg);
-  animation: shimmer 3s ease-in-out infinite;
-}
-@keyframes shimmer {
-  0%   { left: -60%; }
-  100% { left: 130%; }
-}
-.btn-cta:hover  { transform: translateY(-3px); box-shadow: 0 18px 48px rgba(255,153,102,0.55), 0 4px 0 rgba(0,0,0,0.2); }
-.btn-cta:active { transform: scale(0.97) translateY(1px); }
-.btn-cta .btn-icon { font-size: 26px; animation: rocketWiggle 1.5s ease-in-out infinite; }
-@keyframes rocketWiggle {
-  0%,100% { transform: rotate(-8deg); }
-  50%      { transform: rotate(8deg) translateY(-3px); }
-}
-
-.btn-hint {
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 0.3px;
-}
-
-/* ── Install instruction ── */
-.install-box {
-  margin-top: 36px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  padding: 20px 20px;
-  max-width: 400px;
-  width: 100%;
-  backdrop-filter: blur(8px);
-  animation: boxFade 0.8s 0.6s ease both;
-}
-@keyframes boxFade {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.install-title {
-  font-family: 'Fredoka', sans-serif;
-  font-size: 17px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.85);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.install-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  text-align: left;
-}
-.step {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.step-num {
-  flex-shrink: 0;
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple), var(--pink));
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Fredoka', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: white;
-  margin-top: 1px;
-}
-.step-text {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.65);
-  line-height: 1.45;
-}
-.step-text strong { color: rgba(255,255,255,0.9); }
-
-/* ── Footer ── */
-.footer {
-  margin-top: 32px;
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.25);
-  letter-spacing: 0.5px;
-}
-
-/* ── Floating emojis ── */
-.float-emoji {
-  position: fixed;
-  font-size: 28px;
-  pointer-events: none;
-  z-index: 0;
-  animation: floatUp var(--dur) ease-in-out infinite var(--del) alternate;
-  opacity: 0.35;
-  user-select: none;
-}
-@keyframes floatUp {
-  from { transform: translateY(0) rotate(-10deg); opacity: 0.2; }
-  to   { transform: translateY(-30px) rotate(10deg); opacity: 0.5; }
-}
-</style>
+        .smooth-scroll-container {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 transition-colors duration-200 font-sans">
 
-<!-- Starfield -->
-<div class="stars" id="stars"></div>
-
-<!-- Blobs -->
-<div class="blob" style="width:500px;height:500px;background:var(--purple);top:-100px;left:-150px;--t:9s;--mx:40px;--my:30px"></div>
-<div class="blob" style="width:400px;height:400px;background:var(--pink);bottom:-80px;right:-100px;--t:12s;--mx:-30px;--my:-40px"></div>
-<div class="blob" style="width:300px;height:300px;background:var(--blue);top:40%;left:60%;--t:7s;--mx:20px;--my:-20px"></div>
-
-<!-- Floating emojis decoration -->
-<span class="float-emoji" style="top:8%;left:5%;--dur:3.2s;--del:0s">➕</span>
-<span class="float-emoji" style="top:15%;right:8%;--dur:4s;--del:0.5s">⭐</span>
-<span class="float-emoji" style="top:70%;left:4%;--dur:3.5s;--del:1s">🔢</span>
-<span class="float-emoji" style="top:75%;right:5%;--dur:4.2s;--del:0.2s">🎯</span>
-<span class="float-emoji" style="top:40%;left:3%;--dur:5s;--del:0.8s">🏆</span>
-<span class="float-emoji" style="top:50%;right:4%;--dur:3.8s;--del:0.3s">🎉</span>
-
-<!-- Main content -->
-<div class="page">
-
-  <!-- Brand chip -->
-  <div class="brand-chip">
-    <span class="brand-chip-dot"></span>
-    Rahaza Digital
-  </div>
-
-  <!-- Mascot -->
-  <span class="mascot">🌈</span>
-
-  <!-- Title -->
-  <h1 class="title">Math Kids</h1>
-
-  <!-- Subtitle -->
-  <p class="subtitle">
-    Game belajar matematika pertambahan yang seru dan menyenangkan untuk anak-anak! 🎒✨
-  </p>
-
-  <!-- Feature pills -->
-  <div class="features">
-    <div class="feat-pill"><span class="icon">🎮</span> Mini Game Kuis</div>
-    <div class="feat-pill"><span class="icon">🏆</span> Papan Bintang</div>
-    <div class="feat-pill"><span class="icon">🎊</span> Efek Confetti</div>
-    <div class="feat-pill"><span class="icon">📱</span> Bisa Diinstall</div>
-    <div class="feat-pill"><span class="icon">🌙</span> Mode Gelap</div>
-  </div>
-
-  <!-- CTA -->
-  <div class="cta-wrap">
-    <a class="btn-cta" href="https://script.google.com/macros/s/AKfycbwS8oHzavmmNsHXzziHZpBLP1DqkUCI5q95R069MnXc56a_IOMbiKWYAsBdUw6YhmJl/exec" target="_blank" rel="noopener">
-      <span class="btn-icon">🚀</span>
-      Mulai Bermain!
-    </a>
-    <p class="btn-hint">Gratis selamanya · Tanpa iklan</p>
-  </div>
-
-  <!-- Install instructions -->
-  <div class="install-box">
-    <div class="install-title">📲 Cara Install di HP</div>
-    <div class="install-steps">
-      <div class="step">
-        <div class="step-num">A</div>
-        <div class="step-text">
-          <strong>Android (Chrome):</strong> Buka link → tap menu <strong>⋮</strong> → pilih <strong>"Tambahkan ke layar utama"</strong> → Install
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">B</div>
-        <div class="step-text">
-          <strong>iPhone (Safari):</strong> Buka link → tap ikon <strong>Share 📤</strong> → pilih <strong>"Add to Home Screen"</strong> → Add
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">✓</div>
-        <div class="step-text">
-          Setelah install, aplikasi muncul di layar utama HP seperti app sungguhan!
-        </div>
-      </div>
+    <!-- LOADER & TOAST -->
+    <div id="loader" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex justify-center items-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-metallic-500"></div>
     </div>
-  </div>
+    <div id="toast" class="fixed top-5 right-5 z-[70] hidden transition-opacity duration-300 transform-gpu">
+        <div id="toastContent" class="bg-metallic-500 text-white px-6 py-3 rounded shadow-lg flex items-center gap-3">
+            <i class="fas fa-info-circle"></i>
+            <span id="toastMsg">Pesan Notifikasi</span>
+        </div>
+    </div>
 
-  <p class="footer">© 2025 Rahaza Digital · nasimulaskiyaa</p>
+    <!-- VIEW: LOGIN -->
+    <div id="viewLogin" class="min-h-screen flex items-center justify-center p-4">
+        <div class="glass-panel p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-gray-700">
+            <div class="text-center mb-8">
+                <div class="inline-block p-4 rounded-full bg-metallic-100 text-metallic-700 mb-4">
+                    <i class="fas fa-kiwi-bird text-4xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-metallic-700 dark:text-metallic-300">Rahaza Farm</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Vercel Cloud Management</p>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Username</label>
+                    <input type="text" id="username" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-metallic-500 dark:bg-gray-800 dark:border-gray-600 outline-none" required placeholder="admin">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium mb-1">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-metallic-500 dark:bg-gray-800 dark:border-gray-600 outline-none" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full bg-metallic-500 hover:bg-metallic-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 shadow-lg">Masuk</button>
+            </form>
+        </div>
+    </div>
 
-</div>
+    <!-- VIEW: MAIN APP -->
+    <div id="viewApp" class="hidden h-screen flex overflow-hidden">
+        <aside id="sidebar" class="bg-metallic-900 text-white w-64 flex-shrink-0 flex flex-col transition-transform duration-300 absolute md:relative z-40 h-full -translate-x-full md:translate-x-0 shadow-2xl">
+            <div class="h-16 flex items-center justify-between px-4 bg-metallic-900 border-b border-metallic-700">
+                <div class="flex items-center gap-2 font-bold text-lg"><i class="fas fa-kiwi-bird text-metallic-300"></i> Rahaza Farm</div>
+                <button onclick="toggleSidebar()" class="md:hidden text-gray-300 p-2"><i class="fas fa-times"></i></button>
+            </div>
+            <nav class="flex-1 overflow-y-auto py-4 smooth-scroll-container">
+                <ul class="space-y-1 px-2">
+                    <li><a href="#" onclick="navigate('beranda')" class="nav-btn block px-4 py-3 rounded-lg hover:bg-metallic-700 transition" data-target="beranda"><i class="fas fa-home w-6"></i> Beranda</a></li>
+                    <li class="pt-4 pb-2 px-4 text-xs font-semibold text-metallic-300 uppercase tracking-wider">Produksi</li>
+                    <li><a href="#" onclick="navigate('broiler')" class="nav-btn block px-4 py-3 rounded-lg hover:bg-metallic-700 transition" data-target="broiler"><i class="fas fa-drumstick-bite w-6"></i> Broiler</a></li>
+                    <li><a href="#" onclick="navigate('kampung')" class="nav-btn block px-4 py-3 rounded-lg hover:bg-metallic-700 transition" data-target="kampung"><i class="fas fa-feather w-6"></i> Kampung</a></li>
+                    <li><a href="#" onclick="navigate('petelur')" class="nav-btn block px-4 py-3 rounded-lg hover:bg-metallic-700 transition" data-target="petelur"><i class="fas fa-egg w-6"></i> Petelur</a></li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-metallic-700 text-xs">
+                <div id="displayUsername" class="font-bold text-sm">User</div>
+                <button onclick="handleLogout()" class="text-red-400 mt-2 hover:underline p-1 -ml-1">Logout</button>
+            </div>
+        </aside>
 
-<script>
-// Generate stars
-const starsEl = document.getElementById('stars');
-for (let i = 0; i < 120; i++) {
-  const s = document.createElement('div');
-  s.className = 'star';
-  const size = Math.random() * 2.5 + 0.5;
-  s.style.cssText = `
-    width:${size}px; height:${size}px;
-    top:${Math.random()*100}%;
-    left:${Math.random()*100}%;
-    --d:${(Math.random()*3+1.5).toFixed(1)}s;
-    animation-delay:${(Math.random()*4).toFixed(1)}s;
-  `;
-  starsEl.appendChild(s);
-}
-</script>
+        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+            <header class="h-16 glass-panel border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-4 z-10 flex-shrink-0">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="md:hidden p-2 -ml-2"><i class="fas fa-bars text-lg"></i></button>
+                    <h2 id="pageTitle" class="text-xl font-bold text-metallic-700 dark:text-metallic-300">Beranda</h2>
+                </div>
+                <button onclick="toggleTheme()" class="text-gray-600 dark:text-gray-300 p-2"><i id="themeIcon" class="fas fa-moon text-lg"></i></button>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-4 md:p-6 pb-24 smooth-scroll-container bg-gray-100 dark:bg-gray-900">
+                <!-- BERANDA -->
+                <div id="page-beranda" class="page-content space-y-8 animate-fadeIn">
+                    <div class="hero-gradient text-white rounded-2xl p-6 md:p-8 shadow-xl relative overflow-hidden">
+                        <div class="relative z-10 max-w-2xl">
+                            <h1 class="text-3xl md:text-4xl font-black mb-4">Rahaza Farm Cloud</h1>
+                            <p class="text-base md:text-lg opacity-90 leading-relaxed">Sistem terintegrasi untuk pemantauan HPP dan stok ayam secara real-time dari mana saja.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GENERIC PRODUCTION PAGE (Used for Broiler, Kampung, Petelur) -->
+                <div id="page-production" class="page-content hidden space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border-l-4 border-blue-500">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Populasi Aktif</p>
+                            <h3 class="text-2xl font-black mt-1" id="dash-pop">0 Ekor</h3>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border-l-4 border-red-500">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Total Biaya</p>
+                            <h3 class="text-2xl font-black mt-1 text-red-500" id="dash-cost">Rp 0</h3>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border-l-4 border-green-500">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">HPP / Ekor</p>
+                            <h3 class="text-2xl font-black mt-1 text-green-500" id="dash-hpp">Rp 0</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <button onclick="openInputModal('modal')" class="bg-blue-600 text-white p-4 rounded-xl shadow hover:bg-blue-700 flex flex-col items-center gap-2">
+                            <i class="fas fa-plus-circle text-xl"></i>
+                            <span class="text-[10px] font-bold uppercase">DOC Masuk</span>
+                        </button>
+                        <button onclick="openInputModal('operasional')" class="bg-orange-500 text-white p-4 rounded-xl shadow hover:bg-orange-600 flex flex-col items-center gap-2">
+                            <i class="fas fa-coins text-xl"></i>
+                            <span class="text-[10px] font-bold uppercase">Input Biaya</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700">
+                        <div class="p-4 border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                            <h3 class="font-bold text-gray-600 dark:text-gray-300 uppercase text-xs tracking-widest" id="tableTitle">Riwayat Transaksi</h3>
+                        </div>
+                        <div class="overflow-x-auto smooth-scroll-container">
+                            <table class="w-full text-left whitespace-nowrap">
+                                <thead class="bg-gray-100 dark:bg-gray-700 text-[10px] uppercase font-bold text-gray-500">
+                                    <tr>
+                                        <th class="p-4">Tanggal</th>
+                                        <th class="p-4">Jenis</th>
+                                        <th class="p-4">Populasi</th>
+                                        <th class="p-4">Biaya</th>
+                                        <th class="p-4 text-green-600">HPP</th>
+                                        <th class="p-4">Ket</th>
+                                        <th class="p-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productionTableBody" class="divide-y dark:divide-gray-700 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL -->
+    <div id="appModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex justify-center items-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+            <div class="p-4 border-b dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900">
+                <h3 id="modalTitle" class="font-bold uppercase text-xs tracking-wider">Input Data</h3>
+                <button onclick="closeModal()" class="text-gray-400 p-2"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <form id="appForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <input type="hidden" name="type" id="formType">
+                    <div id="dynamicFields" class="space-y-4"></div>
+                    <div class="pt-4 flex justify-end gap-3">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm text-gray-500">Batal</button>
+                        <button type="submit" class="px-6 py-2 text-sm bg-metallic-500 text-white rounded-lg font-bold shadow-lg">Simpan ke Cloud</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================= CONFIGURATION =================
+        // GANTI DENGAN URL WEB APP GAS HASIL DEPLOY TERBARU
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwS8oHzavmmNsHXzziHZpBLP1DqkUCI5q95R069MnXc56a_IOMbiKWYAsBdUw6YhmJl/exec"; 
+
+        let currentUser = JSON.parse(localStorage.getItem('rahaza_user')) || null;
+        let activeModule = 'beranda';
+
+        // ================= API BRIDGE =================
+        const api = {
+            run: async (action, payload = {}) => {
+                showLoader();
+                try {
+                    // Validasi URL agar tidak error fetch
+                    if (GAS_API_URL.includes("https://script.google.com/macros/s/AKfycbyfg-DQ_mceJV-1JLXqSxzldfSQn-3K6hjy1_RreW6-xv3tX6WiTe6UY-V4VsryYIFJ/exec")) {
+                        throw new Error("API URL belum diatur. Silakan masukkan URL Apps Script yang valid.");
+                    }
+
+                    const response = await fetch(GAS_API_URL, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            action: action,
+                            payload: payload,
+                            userId: currentUser ? currentUser.id : null
+                        })
+                    });
+                    const res = await response.json();
+                    return typeof res === 'string' ? JSON.parse(res) : res;
+                } catch (err) {
+                    console.error("Fetch Error:", err);
+                    showToast(err.message || "Gagal terhubung ke Server Cloud", "error");
+                    throw err;
+                } finally {
+                    hideLoader();
+                }
+            }
+        };
+
+        // ================= LOGIC =================
+        window.onload = () => {
+            if(currentUser) {
+                document.getElementById('viewLogin').classList.add('hidden');
+                document.getElementById('viewApp').classList.remove('hidden');
+                document.getElementById('displayUsername').innerText = currentUser.username;
+                navigate('beranda');
+            }
+        };
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const res = await api.run('doLogin', { username, password });
+                if(res.success) {
+                    currentUser = res.user;
+                    localStorage.setItem('rahaza_user', JSON.stringify(currentUser));
+                    location.reload();
+                } else {
+                    showToast(res.message, "error");
+                }
+            } catch(e) {}
+        }
+
+        function navigate(page) {
+            activeModule = page;
+            const contentPages = ['beranda', 'production'];
+            
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            
+            if (page === 'beranda') {
+                document.getElementById('pageTitle').innerText = "Beranda";
+                document.getElementById('page-beranda').classList.remove('hidden');
+            } else {
+                // Untuk broiler, kampung, petelur
+                document.getElementById('pageTitle').innerText = page.charAt(0).toUpperCase() + page.slice(1);
+                document.getElementById('page-production').classList.remove('hidden');
+                document.getElementById('tableTitle').innerText = `Riwayat Transaksi ${page.charAt(0).toUpperCase() + page.slice(1)}`;
+                refreshProductionData(page);
+            }
+
+            if(window.innerWidth < 768 && !document.getElementById('sidebar').classList.contains('-translate-x-full')) {
+                toggleSidebar();
+            }
+        }
+
+        async function refreshProductionData(mod) {
+            const actionGet = `get${mod.charAt(0).toUpperCase() + mod.slice(1)}Extended`;
+            try {
+                // Get Dashboard
+                const dashAll = await api.run('getDashboardDataExtended', { role: currentUser.role });
+                const dash = dashAll[mod];
+                if(dash) {
+                    document.getElementById('dash-pop').innerText = dash.populasi.toLocaleString() + " Ekor";
+                    document.getElementById('dash-cost').innerText = "Rp " + dash.cost.toLocaleString();
+                    document.getElementById('dash-hpp').innerText = "Rp " + (dash.hpp || 0).toLocaleString();
+                }
+
+                // Get Table List
+                const list = await api.run(actionGet, { role: currentUser.role });
+                const body = document.getElementById('productionTableBody');
+                body.innerHTML = list.length ? list.map(row => `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+                        <td class="p-4 font-mono text-xs">${row.tanggal}</td>
+                        <td class="p-4"><span class="px-2 py-1 rounded-full text-[9px] font-bold bg-metallic-100 text-metallic-700">${row.jenis}</span></td>
+                        <td class="p-4">${row.populasi || 0}</td>
+                        <td class="p-4">Rp ${(row.biaya || 0).toLocaleString()}</td>
+                        <td class="p-4 font-bold text-green-600">Rp ${(row.hpp_saat_ini || 0).toLocaleString()}</td>
+                        <td class="p-4 italic text-xs text-gray-400">${row.keterangan || '-'}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="deleteData('${mod}','${row.id}')" class="text-gray-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('') : '<tr><td colspan="7" class="p-8 text-center text-gray-400">Tidak ada data</td></tr>';
+            } catch(e) {}
+        }
+
+        function openInputModal(sub) {
+            const fields = document.getElementById('dynamicFields');
+            document.getElementById('formType').value = sub;
+            document.getElementById('modalTitle').innerText = sub === 'modal' ? 'Input DOC Masuk' : 'Input Biaya';
+            
+            fields.innerHTML = `
+                <div><label class="block text-[10px] font-bold text-gray-400">TANGGAL</label><input type="date" name="tanggal" required class="w-full border p-3 rounded-lg dark:bg-gray-700" value="${new Date().toISOString().split('T')[0]}"></div>
+                ${sub === 'modal' ? '<div><label class="block text-[10px] font-bold text-gray-400">JUMLAH EKOR</label><input type="number" name="populasi" required class="w-full border p-3 rounded-lg dark:bg-gray-700"></div>' : ''}
+                <div><label class="block text-[10px] font-bold text-gray-400">NOMINAL BIAYA (Rp)</label><input type="number" name="biaya" required class="w-full border p-3 rounded-lg dark:bg-gray-700"></div>
+                <div><label class="block text-[10px] font-bold text-gray-400">KETERANGAN</label><input type="text" name="keterangan" class="w-full border p-3 rounded-lg dark:bg-gray-700"></div>
+            `;
+            document.getElementById('appModal').classList.remove('hidden');
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            const actionSave = `save${activeModule.charAt(0).toUpperCase() + activeModule.slice(1)}Extended`;
+            
+            try {
+                const res = await api.run(actionSave, { data });
+                if(res.success) {
+                    showToast("Data Tersimpan", "success");
+                    closeModal();
+                    refreshProductionData(activeModule);
+                }
+            } catch(e) {}
+        }
+
+        async function deleteData(mod, id) {
+            if(!confirm("Hapus data ini?")) return;
+            try {
+                const res = await api.run('deleteModuleData', { mod, id });
+                if(res.success) refreshProductionData(activeModule);
+            } catch(e) {}
+        }
+
+        // ================= UI HELPERS =================
+        function closeModal() { document.getElementById('appModal').classList.add('hidden'); }
+        function showLoader() { document.getElementById('loader').classList.remove('hidden'); }
+        function hideLoader() { document.getElementById('loader').classList.add('hidden'); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        function toggleTheme() { document.documentElement.classList.toggle('dark'); }
+        function handleLogout() { localStorage.removeItem('rahaza_user'); location.reload(); }
+        function showToast(m, t) {
+            const toast = document.getElementById('toast');
+            const content = document.getElementById('toastContent');
+            document.getElementById('toastMsg').innerText = m;
+            
+            if (t === 'error') content.classList.replace('bg-metallic-500', 'bg-red-500');
+            else content.classList.replace('bg-red-500', 'bg-metallic-500');
+
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+    </script>
 </body>
 </html>
